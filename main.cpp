@@ -5,7 +5,8 @@
 #include <map>
 #include <chrono>
 #include <thread>
-#include "C:\Users\dimak\CLionProjects\lab2_1\sequence\LinkedList.h"  // Включаем вашу реализацию LinkedList
+#include "sequence\LinkedList.h"
+// Включаем вашу реализацию LinkedList
 
 class GUI {
 public:
@@ -15,7 +16,7 @@ public:
         window.setFramerateLimit(60);
 
         // Загрузка шрифта
-        if (!font.loadFromFile("C:\\Users\\dimak\\CLionProjects\\lab2_1\\fonts\\arial.ttf")) {
+        if (!font.loadFromFile("../include/fonts/arial.ttf")) {
             std::cerr << "Error loading font!" << std::endl;
         }
 
