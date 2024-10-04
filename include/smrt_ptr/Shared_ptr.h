@@ -57,14 +57,14 @@ public:
         if (m_ptr != nullptr) {
             return m_ptr;
         }
-        throw AttemptToNullPoinerFieldException("Attempt to access the nullptr field.");
+        throw AttemptToNullPointerFieldException("Attempt to access the nullptr field.");
     }
 
     const T *operator->() const {
         if (m_ptr != nullptr) {
             return m_ptr;
         }
-        throw AttemptToNullPoinerFieldException("Attempt to access the nullptr field.");
+        throw AttemptToNullPointerFieldException("Attempt to access the nullptr field.");
     }
 
     Shared_ptr &operator=(const Shared_ptr &other) {
@@ -87,8 +87,7 @@ public:
 
     Shared_ptr &operator=(Shared_ptr &&other) noexcept {
         if (this != &other) {
-            reset();
-            delete cb;
+            delete_ptr();
             m_ptr = other.m_ptr;
             cb = other.cb;
             other.m_ptr = nullptr;

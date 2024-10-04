@@ -23,13 +23,14 @@ public:
         return message_.c_str();
     }
 };
-class AttemptToNullPoinerFieldException : public std::exception {
+
+class AttemptToNullPointerFieldException : public std::exception {
     std::string message_;
 
 public:
-    explicit AttemptToNullPoinerFieldException(const std::string &message) : message_(message) {}
+    explicit AttemptToNullPointerFieldException(const std::string &message) : message_(message) {}
 
-    explicit AttemptToNullPoinerFieldException(const char *message) : message_(message) {}
+    explicit AttemptToNullPointerFieldException(const char *message) : message_(message) {}
 
     const char *what() const noexcept override {
         return message_.c_str();

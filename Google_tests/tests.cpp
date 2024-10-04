@@ -2,7 +2,7 @@
 
 int main(int argc, char **argv) {
     ::testing::InitGoogleTest(&argc, argv);
-    int result = RUN_ALL_TESTS();  // Запуск тестов
+    int result = RUN_ALL_TESTS();
 
-    return result;  // Возвращаем результат тестов
+    return result;
 }

@@ -9,13 +9,13 @@ template<class T>
 class LinkedList {
     struct Node {
         T value;
-        Shared_ptr<Node> next;  // Указатель на следующий элемент
+        Shared_ptr<Node> next;
 
         Node(T value, Shared_ptr<Node> next = nullptr) : value(value), next(next) {}
     };
 
-    Shared_ptr<Node> first = nullptr;  // Указатель на первый элемент
-    Shared_ptr<Node> last = nullptr;   // Указатель на последний элемент
+    Shared_ptr<Node> first = nullptr;
+    Shared_ptr<Node> last = nullptr;
     int size = 0;
 
 public:
