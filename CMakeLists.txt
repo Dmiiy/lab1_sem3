@@ -9,7 +9,6 @@ FETCHCONTENT_MAKEAVAILABLE(SFML)
 set(CMAKE_CXX_STANDARD 17)
 
 add_executable(lab2_1 main.cpp
-        include/smrt_ptr/smtr_ptr_exc.h
 
 )
 

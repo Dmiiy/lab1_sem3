@@ -10,7 +10,7 @@ class LinkedListSequence : public Sequence<T> {
 
     void checkIndex(int index) const {
         if (index < 0 || index >= getLength())
-            throw IndexOutOfRange("Index out of range");
+            throw std::runtime_error("Index out of bounds");
     }
 
 public:

@@ -5,7 +5,7 @@
 #include <map>
 #include <chrono>
 #include <thread>
- // Включаем вашу реализацию LinkedList
+// Включаем вашу реализацию LinkedList
 #include "sequence/LinkedList.h"
 
 class GUI {
@@ -75,7 +75,7 @@ private:
         sf::Color clickedColor;
     };
 
-    std::map<sf::RectangleShape*, ButtonState> buttonStates;
+    std::map<sf::RectangleShape *, ButtonState> buttonStates;
 
     void processEvents() {
         sf::Event event;
@@ -97,28 +97,28 @@ private:
             if (event.type == sf::Event::MouseButtonPressed) {
                 if (isButtonClicked(addStartButton, event.mouseButton.x, event.mouseButton.y)) {
                     handleAddToStart();
-                    changeButtonColor(addStartButton, sf::Color(66,170,255));
+                    changeButtonColor(addStartButton, sf::Color(66, 170, 255));
                 } else if (isButtonClicked(addEndButton, event.mouseButton.x, event.mouseButton.y)) {
                     handleAddToEnd();
-                    changeButtonColor(addEndButton, sf::Color(66,170,255));
+                    changeButtonColor(addEndButton, sf::Color(66, 170, 255));
                 } else if (isButtonClicked(insertButton, event.mouseButton.x, event.mouseButton.y)) {
                     handleInsertAtIndex();
-                    changeButtonColor(insertButton, sf::Color(66,170,255));
+                    changeButtonColor(insertButton, sf::Color(66, 170, 255));
                 } else if (isButtonClicked(deleteButton, event.mouseButton.x, event.mouseButton.y)) {
                     handleDeleteAtIndex();
-                    changeButtonColor(deleteButton, sf::Color(66,170,255));
+                    changeButtonColor(deleteButton, sf::Color(66, 170, 255));
                 } else if (isButtonClicked(getElementButton, event.mouseButton.x, event.mouseButton.y)) {
                     handleGetElementAtIndex();
-                    changeButtonColor(getElementButton, sf::Color(66,170,255));
+                    changeButtonColor(getElementButton, sf::Color(66, 170, 255));
                 } else if (isButtonClicked(sublistButton, event.mouseButton.x, event.mouseButton.y)) {
                     handleGetSublist();
-                    changeButtonColor(sublistButton, sf::Color(66,170,255));
+                    changeButtonColor(sublistButton, sf::Color(66, 170, 255));
                 } else if (isButtonClicked(concatButton, event.mouseButton.x, event.mouseButton.y)) {
                     handleConcatLists();
-                    changeButtonColor(concatButton, sf::Color(66,170,255));
+                    changeButtonColor(concatButton, sf::Color(66, 170, 255));
                 } else if (isButtonClicked(clearButton, event.mouseButton.x, event.mouseButton.y)) {
                     handleClearList();
-                    changeButtonColor(clearButton, sf::Color(66,170,255));
+                    changeButtonColor(clearButton, sf::Color(66, 170, 255));
                 } else if (isButtonClicked(exitButton, event.mouseButton.x, event.mouseButton.y)) {
                     window.close();
                 }
@@ -138,7 +138,7 @@ private:
         buttonText.setPosition(x + 10, y + 5);
 
         // Запоминаем состояние кнопки
-        buttonStates[&button] = { false, sf::Color(11, 11, 100), sf::Color(66,170,255) };
+        buttonStates[&button] = {false, sf::Color(11, 11, 100), sf::Color(66, 170, 255)};
     }
 
     bool isButtonClicked(const sf::RectangleShape &button, float x, float y) {
@@ -226,7 +226,7 @@ private:
             std::istringstream iss(userInput);
             int startIndex, endIndex;
             if (iss >> startIndex >> endIndex) {
-                LinkedList<int>* sublist = list.getSubList(startIndex, endIndex);
+                LinkedList<int> *sublist = list.getSubList(startIndex, endIndex);
                 std::stringstream ss;
                 ss << "Sublist: [";
                 for (int i = 0; i < sublist->getLength(); i++) {
@@ -295,7 +295,6 @@ private:
             infoText.setString("Error occurred during concat: Invalid input.");
         }
     }
-
 
 
     void handleClearList() {

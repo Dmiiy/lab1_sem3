@@ -2,20 +2,20 @@
 #define LINKEDLIST_INCLUDED
 
 #include <iostream>
-#include "Common.h"
-#include "../smrt_ptr/Shared_ptr.h"
+#include "SeqExc.h"
+#include "../smrt_ptr/SharedPtr.h"
 
 template<class T>
 class LinkedList {
     struct Node {
         T value;
-        Shared_ptr<Node> next;
+        SharedPtr<Node> next;
 
-        Node(T value, Shared_ptr<Node> next = nullptr) : value(value), next(next) {}
+        Node(T value, SharedPtr<Node> next = nullptr) : value(value), next(next) {}
     };
 
-    Shared_ptr<Node> first = nullptr;
-    Shared_ptr<Node> last = nullptr;
+    SharedPtr<Node> first = nullptr;
+    SharedPtr<Node> last = nullptr;
     int size = 0;
 
 public:
@@ -28,14 +28,14 @@ public:
     LinkedList() = default;
 
     LinkedList(const LinkedList<T> &list) : size(list.size) {
-        Shared_ptr<Node> current = list.first;
+        SharedPtr<Node> current = list.first;
         while (current.get()) {
             append(current->value);
             current = current->next;
         }
     }
 
-    ~LinkedList() = default;  // Shared_ptr автоматически очистит память
+    ~LinkedList() = default;
 
     T getFirst() const {
         if (!first.get()) throw IndexOutOfRange("List is empty");
@@ -48,16 +48,17 @@ public:
     }
 
     void clear() {
-        first = nullptr;  // Устанавливаем указатель на первый элемент в nullptr
-        last = nullptr;   // Устанавливаем указатель на последний элемент в nullptr
-        size = 0;        // Сбрасываем размер списка на 0
+        first = nullptr;
+        last = nullptr;
+        size = 0;
     }
 
     T &get(int index) const {
-        if (index < 0 || index >= size){
-            throw IndexOutOfRange("Index out of range");}
+        if (index < 0 || index >= size) {
+            throw IndexOutOfRange("Index out of range");
+        }
 
-        Shared_ptr<Node> current = first;
+        SharedPtr<Node> current = first;
         for (int i = 0; i < index; i++) {
             current = current->next;
         }
@@ -76,7 +77,7 @@ public:
         if (startIndex < 0 || endIndex < 0 || startIndex > endIndex || endIndex >= size)
             throw IndexOutOfRange("Invalid index range");
 
-        Shared_ptr<Node> current = first;
+        SharedPtr<Node> current = first;
         for (int i = 0; i < startIndex; i++) {
             current = current->next;
         }
@@ -94,7 +95,7 @@ public:
     }
 
     void append(const T &value) {
-        auto newNode = Shared_ptr<Node>(new Node(value));
+        auto newNode = SharedPtr<Node>(new Node(value, nullptr));
 
         if (!first.get()) {
             first = newNode;
@@ -109,7 +110,7 @@ public:
 
 
     void prepend(T item) {
-        auto newNode = Shared_ptr<Node>(new Node(item, first));
+        auto newNode = SharedPtr<Node>(new Node(item, first));
         if (!first.get()) {
             last = newNode;
         }
@@ -126,12 +127,12 @@ public:
             return;
         }
 
-        Shared_ptr<Node> current = first;
+        SharedPtr<Node> current = first;
         for (int i = 0; i < index - 1; i++) {
             current = current->next;
         }
 
-        auto newNode = Shared_ptr<Node>(new Node(item, current->next));
+        auto newNode = SharedPtr<Node>(new Node(item, current->next));
         current->next = newNode;
 
         if (index == size) {
@@ -142,13 +143,9 @@ public:
     }
 
     LinkedList<T> *concat(LinkedList<T> *list) const {
-        // Создаем копию текущего списка
         auto *result = new LinkedList<T>(*this);
+        SharedPtr<Node> current = list->first;
 
-        // Указатель на первый элемент второго списка
-        Shared_ptr<Node> current = list->first;
-
-        // Добавляем элементы из второго списка в конец нового списка
         while (current.get()) {
             result->append(current->value);  // Метод append должен увеличивать size
             current = current->next;
@@ -164,7 +161,8 @@ public:
 
         // Если удаляем первый элемент
         if (index == 0) {
-            first = first->next;
+            SharedPtr<Node> node_to_replace = first->next;
+            first = node_to_replace;
             if (!first.get()) {
                 last = nullptr;
             }
@@ -172,17 +170,17 @@ public:
             return;
         }
 
-        // Поиск узла, предшествующего удаляемому
-        Shared_ptr<Node> current = first;
+
+        SharedPtr<Node> current = first;
         for (int i = 0; i < index - 1; i++) {
             current = current->next;
         }
 
-        // Текущий узел перед удаляемым
-        Shared_ptr<Node> nodeToRemove = current->next;
+
+        SharedPtr<Node> nodeToRemove = current->next;
         current->next = nodeToRemove->next;
 
-        // Если удаляем последний элемент
+
         if (index == size - 1) {
             last = current;
         }
@@ -190,44 +188,6 @@ public:
         size--;
     }
 
-
-    struct Iterator {
-        Shared_ptr<Node> m_ptr;
-
-        // Конструктор итератора
-        Iterator(Shared_ptr<Node> ptr) : m_ptr(ptr) {}
-
-        // Оператор разыменования
-        T &operator*() const {
-            if (!m_ptr) {
-                throw std::runtime_error("Dereferencing null pointer");
-            }
-            return m_ptr->value;
-        }
-
-        // Оператор инкремента (префиксный)
-        Iterator &operator++() {
-            if (m_ptr) {
-                m_ptr = m_ptr->next;
-            }
-            return *this;
-        }
-
-        // Оператор неравенства
-        bool operator!=(const Iterator &other) const {
-            return m_ptr != other.m_ptr;
-        }
-    };
-
-// Метод для получения итератора на первый элемент списка
-    Iterator begin() const {
-        return Iterator(first);
-    }
-
-// Метод для получения итератора, указывающего на элемент за последним (nullptr)
-    Iterator end() const {
-        return Iterator(nullptr);
-    }
 
 };
 
