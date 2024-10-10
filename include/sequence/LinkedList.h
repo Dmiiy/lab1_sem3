@@ -65,7 +65,7 @@ public:
         return current->value;
     }
 
-    T operator[](int i) const {
+    const T &operator[](int i) const {
         return get(i);
     }
 
@@ -142,7 +142,7 @@ public:
         size++;
     }
 
-    LinkedList<T> *concat(LinkedList<T> *list) const {
+    LinkedList<T> *concat(const LinkedList<T> *list) const {
         auto *result = new LinkedList<T>(*this);
         SharedPtr<Node> current = list->first;
 

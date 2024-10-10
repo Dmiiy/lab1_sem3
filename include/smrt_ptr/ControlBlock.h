@@ -1,9 +1,6 @@
 #ifndef LAB2_1_CONTROLBLOCK_H
 #define LAB2_1_CONTROLBLOCK_H
 
-// snake_case -> control_block
-// CammleCase -> ControlBlocK
-
 template<typename T>
 class ControlBlock {
 private:
@@ -31,12 +28,12 @@ public:
         return ref_count;
     }
 
-    void ref_plus() // post increment
+    void ref_plus()
     {
         ref_count++;
     }
 
-    void ref_minus() // pre increment
+    void ref_minus()
     {
         ref_count--;
     }
@@ -52,6 +49,7 @@ public:
     void weak_plus() {
         weak_count++;
     }
+
 };
 
 

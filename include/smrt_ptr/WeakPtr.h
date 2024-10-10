@@ -57,7 +57,7 @@ public:
     }
 
     //methods
-    SharedPtr<T> lock() const {
+    SharedPtr<T> lock(){
         return expired() ? SharedPtr<T>(nullptr) : SharedPtr<T>(cb, true);
     }
 

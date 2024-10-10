@@ -7,24 +7,22 @@
 template<typename T>
 class SharedPtr {
     template<typename U>
-    friend
-    class WeakPtr;
+    friend class WeakPtr;
 
 private:
     ControlBlock<T> *cb;
 
+    SharedPtr(ControlBlock<T> *cb, bool copy) : cb(cb) {
+        if (cb->get_ptr() != nullptr) {
+            cb->ref_plus();
+        }
+    }
 public:
 
     //Constructors
 
     SharedPtr(T *ptr = nullptr) noexcept {
         cb = new ControlBlock<T>(ptr);
-        if (cb->get_ptr() != nullptr) {
-            cb->ref_plus();
-        }
-    }
-
-    SharedPtr(ControlBlock<T> *cb, bool copy) : cb(cb) {
         if (cb->get_ptr() != nullptr) {
             cb->ref_plus();
         }
@@ -37,7 +35,7 @@ public:
     }
 
     template<typename U>
-    SharedPtr(const SharedPtr<U> &other, typename std::enable_if<std::is_convertible<U *, T *>::value>::type * = 0)
+    SharedPtr(const SharedPtr<U> &other)
             : cb(reinterpret_cast<ControlBlock<T> *>(other.get_cb())) {
         if (cb->get_ptr() != nullptr) {
             cb->ref_plus();

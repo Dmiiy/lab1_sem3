@@ -18,13 +18,6 @@ public:
 
     UniquePtr &operator=(const UniquePtr &) = delete;
 
-    T &operator*() {
-        if (m_ptr != nullptr) {
-            return *m_ptr;
-        }
-        throw NullPointerException("Null pointer exception");
-    }
-
     // move constructors
     UniquePtr(UniquePtr &&other) noexcept: m_ptr(other.m_ptr) {
         other.m_ptr = nullptr;
@@ -45,6 +38,13 @@ public:
     }
 
     // methods
+    T &operator*() {
+        if (m_ptr != nullptr) {
+            return *m_ptr;
+        }
+        throw NullPointerException("Null pointer exception");
+    }
+
     const T &operator*() const {
         if (m_ptr != nullptr) {
             return *m_ptr;

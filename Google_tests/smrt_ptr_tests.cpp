@@ -263,16 +263,58 @@ TEST(WeakPtr, LockReturnsNullptrWhenExpired) {
     EXPECT_EQ(locked.get(), nullptr);
 }
 
-TEST(SharedPtr, upcasting) {
-    // Создаем SharedPtr на объект LinkedListSequence
+TEST(SharedPtr, Upcasting) {
     SharedPtr<LinkedListSequence<int>> linkedListPtr(new LinkedListSequence<int>());
 
     // Преобразование к базовому классу Sequence
     SharedPtr<Sequence<int>> sequencePtr = linkedListPtr; // Upcasting
 
     // Теперь можем работать с sequencePtr как с Sequence
-    sequencePtr.get()->append(42); // Выведет: "Appended: 42 to LinkedListSequence."
+    sequencePtr->append(42);
+    EXPECT_EQ(sequencePtr->get(0), 42);
+}
 
-    EXPECT_EQ(sequencePtr.get()->get(0), 42);
+// Тест для проверки корректного управления счётчиком ссылок
+TEST(SharedPtr, UpcastingReferenceCount) {
+    SharedPtr<LinkedListSequence<int>> linkedListPtr(new LinkedListSequence<int>());
+    EXPECT_EQ(linkedListPtr.use_count(), 1); // Проверяем, что счётчик ссылок равен 1
 
+    // Преобразование к базовому классу Sequence
+    SharedPtr<Sequence<int>> sequencePtr = linkedListPtr; // Upcasting
+    EXPECT_EQ(linkedListPtr.use_count(), 2); // Проверяем, что счётчик ссылок равен 2 после апкаста
+
+    // Убедимся, что всё работает правильно после апкаста
+    sequencePtr->append(10);
+    EXPECT_EQ(sequencePtr->get(0), 10); // Проверяем, что новый элемент добавился
+}
+
+// Тест на корректное удаление объекта
+TEST(SharedPtr, UpcastingDestructor) {
+    {
+        SharedPtr<LinkedListSequence<int>> linkedListPtr(new LinkedListSequence<int>());
+        SharedPtr<Sequence<int>> sequencePtr = linkedListPtr; // Upcasting
+        EXPECT_EQ(linkedListPtr.use_count(), 2); // Счётчик ссылок равен 2
+    } // linkedListPtr и sequencePtr выходят из области видимости
+
+}
+
+// Тест на проверку неправильного апкаста
+TEST(SharedPtr, UpcastingInvalidType) {
+    // Создание экземпляра LinkedListSequence
+    SharedPtr<LinkedListSequence<int>> linkedListPtr(new LinkedListSequence<int>());
+
+    // Проверка компиляции
+    // SharedPtr<OtherType<int>> otherPtr = linkedListPtr; // Это должно вызвать ошибку компиляции
+    // В данном случае вам нужно будет проверить это вручную, так как это будет приводить к ошибке компиляции
+}
+
+// Тест на повторное использование одного указателя
+TEST(SharedPtr, UpcastingSamePointer) {
+    SharedPtr<LinkedListSequence<int>> linkedListPtr(new LinkedListSequence<int>());
+
+    // Преобразование к базовому классу Sequence
+    SharedPtr<Sequence<int>> sequencePtr1 = linkedListPtr; // Upcasting
+    SharedPtr<Sequence<int>> sequencePtr2 = linkedListPtr; // Ещё один upcasting
+
+    EXPECT_EQ(linkedListPtr.use_count(), 3); // Счётчик ссылок должен быть 3
 }
