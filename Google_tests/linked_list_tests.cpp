@@ -1,6 +1,5 @@
 #include "..\include\sequence\Sequence.h"
 #include "..\include\sequence\LinkedListSequence.h"
-#include "..\include\sequence\LinkedList.h"
 
 #include "lib/googletest/include/gtest/gtest.h"
 
@@ -44,13 +43,12 @@ TEST(LinkedList, RemoveAt) {
 TEST(LinkedList, GetSubList) {
     int items[] = {1, 2, 3, 4, 5};
     LinkedList<int> list(items, 5);
-    LinkedList<int> *subList = list.getSubList(1, 3);
+    auto subList = list.getSubList(1, 3);
 
     ASSERT_EQ(subList->getLength(), 3);
     ASSERT_EQ(subList->get(0), 2);
     ASSERT_EQ(subList->get(2), 4);
 
-    delete subList; // не забываем очистить память
 }
 
 TEST(LinkedList, Concat) {
@@ -58,15 +56,14 @@ TEST(LinkedList, Concat) {
     int items2[] = {4, 5};
     LinkedList<int> list1(items1, 3);
     LinkedList<int> list2(items2, 2);
-
-    LinkedList<int> *result = list1.concat(&list2);
+    auto result = list1.concat(&list2);
 
     ASSERT_EQ(result->getLength(), 8);
     ASSERT_EQ(result->get(0), 1);
     ASSERT_EQ(result->get(4), 5);
 
-    delete result;
 }
+
 
 //LinkedListSequence
 
@@ -247,7 +244,3 @@ TEST(LinkedListSequence, insertAt) {
     ASSERT_EQ(wstring(L"third"), list->get(3));
     delete list;
 }
-
-
-
-

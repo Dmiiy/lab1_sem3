@@ -73,7 +73,7 @@ public:
         return get(i);
     }
 
-    LinkedList<T> *getSubList(int startIndex, int endIndex) const {
+    SharedPtr<LinkedList<T>> getSubList(int startIndex, int endIndex) const {
         if (startIndex < 0 || endIndex < 0 || startIndex > endIndex || endIndex >= size)
             throw IndexOutOfRange("Invalid index range");
 
@@ -82,7 +82,8 @@ public:
             current = current->next;
         }
 
-        auto *subList = new LinkedList<T>();
+        // Используем SharedPtr для создания нового списка
+        auto subList = SharedPtr<LinkedList<T>>(new LinkedList<T>());
         for (int i = startIndex; i <= endIndex; i++) {
             subList->append(current->value);
             current = current->next;
@@ -107,7 +108,6 @@ public:
 
         size++;
     }
-
 
     void prepend(T item) {
         auto newNode = SharedPtr<Node>(new Node(item, first));
@@ -142,8 +142,8 @@ public:
         size++;
     }
 
-    LinkedList<T> *concat(const LinkedList<T> *list) const {
-        auto *result = new LinkedList<T>(*this);
+    SharedPtr<LinkedList<T>> concat(const LinkedList<T> *list) const {
+        auto result = SharedPtr<LinkedList<T>>(new LinkedList<T>(*this));
         SharedPtr<Node> current = list->first;
 
         while (current.get()) {
@@ -153,7 +153,6 @@ public:
 
         return result;
     }
-
 
     void removeAt(int index) {
         if (index < 0 || index >= size)
@@ -170,16 +169,13 @@ public:
             return;
         }
 
-
         SharedPtr<Node> current = first;
         for (int i = 0; i < index - 1; i++) {
             current = current->next;
         }
 
-
         SharedPtr<Node> nodeToRemove = current->next;
         current->next = nodeToRemove->next;
-
 
         if (index == size - 1) {
             last = current;
@@ -187,8 +183,6 @@ public:
 
         size--;
     }
-
-
 };
 
-#endif
+#endif // LINKEDLIST_INCLUDED
