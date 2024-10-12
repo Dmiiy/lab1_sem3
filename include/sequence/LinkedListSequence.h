@@ -51,7 +51,7 @@ public:
     SharedPtr<Sequence<T>> getSubsequence(int startIndex, int endIndex) const override {
         checkIndex(startIndex);
         checkIndex(endIndex);
-        auto res = SharedPtr<LinkedListSequence<T>>(new LinkedListSequence<T>());
+        auto res = SharedPtr<Sequence<T>>(static_cast<Sequence<T>*>(new LinkedListSequence<T>()));
 
         for (int index = startIndex; index <= endIndex; index++) {
             res->append(data.get(index));
@@ -81,7 +81,7 @@ public:
 
     // Конкатенация двух последовательностей
     SharedPtr<Sequence<T>> concat(Sequence<T> *list) override {
-        auto res = SharedPtr<LinkedListSequence<T>>(new LinkedListSequence<T>(*this));
+        auto res = SharedPtr<Sequence<T>>(static_cast<Sequence<T>*>(new LinkedListSequence<T>(*this)));
 
         for (int i = 0; i < list->getLength(); i++) {
             res->append(list->get(i));
@@ -99,7 +99,7 @@ public:
 
     // Применение функции к элементам последовательности
     SharedPtr<Sequence<T>> map(T (*f)(T)) const override {
-        auto res = SharedPtr<LinkedListSequence<T>>(new LinkedListSequence<T>());
+        auto res = SharedPtr<Sequence<T>>(static_cast<Sequence<T>*>(new LinkedListSequence<T>));
 
         for (int i = 0; i < getLength(); i++) {
             res->append(f(data.get(i)));
@@ -109,7 +109,7 @@ public:
 
     // Фильтрация элементов последовательности
     SharedPtr<Sequence<T>> where(bool (*h)(T)) const override {
-        auto res = SharedPtr<LinkedListSequence<T>>(new LinkedListSequence<T>());
+        auto res = SharedPtr<Sequence<T>>(static_cast<Sequence<T>*>(new LinkedListSequence<T>));
 
         for (int i = 0; i < getLength(); i++) {
             if (h(data.get(i))) {

@@ -34,14 +34,6 @@ public:
         }
     }
 
-    template<typename U>
-    SharedPtr(const SharedPtr<U> &other)
-            : cb(reinterpret_cast<ControlBlock<T> *>(other.get_cb())) {
-        if (cb->get_ptr() != nullptr) {
-            cb->ref_plus();
-        }
-    }
-
     SharedPtr &operator=(const SharedPtr &other) {
         if (this != &other) {
             delete_ptr();
